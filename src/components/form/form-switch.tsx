@@ -20,6 +20,7 @@ const Slider = styled.span(
     left: 0;
     right: 0;
     bottom: 0;
+    color: ${colors.input.color};
     background-color: ${colors.input.backgroundColor};
     border: 1px solid ${colors.input.borderColor};
     transition: background-color 0.4s;
@@ -39,11 +40,6 @@ const Slider = styled.span(
       border-radius: 50%;
       background-color: ${colors.input.color};
       transition: 0.4s;
-    }
-
-    & > svg:first-child {
-    }
-    & > svg:last-child {
     }
 
     input:checked + & {
@@ -88,8 +84,8 @@ export type FormSwitchProps<TFieldValues extends FieldValues = FieldValues> = Re
   BaseFormFieldProps<TFieldValues> &
   LabelAndHelp & {
     onChange?(value: boolean): void
-    uncheckedIcon?: IconProp | true
-    checkedIcon?: IconProp | true
+    uncheckedIcon?: IconProp | boolean
+    checkedIcon?: IconProp | boolean
   }
 const FormSwitch = <TFieldValues extends FieldValues = FieldValues>({
   control,
@@ -100,8 +96,8 @@ const FormSwitch = <TFieldValues extends FieldValues = FieldValues>({
 
   onChange,
   defaultChecked,
-  uncheckedIcon,
-  checkedIcon,
+  uncheckedIcon = true,
+  checkedIcon = true,
   ...inputProps
 }: FormSwitchProps<TFieldValues>): React.ReactElement => {
   const methods = useFormContext()
