@@ -1,0 +1,19 @@
+{
+  "locales": {
+    "switchHelp": "Changer la langue pour {{name}}",
+    "en": "Anglais",
+    "fr": "Français"
+  },
+  "navbar": {
+  },
+  "social": {
+    "twitter": "Twitter"
+  },
+  "pages": {
+    "not-found": {
+      "title": "Page introuvable",
+      "message": "Oops... Nous n'avons rien trouvez ici.",
+      "back": "Retour au site"
+    }
+  }
+}

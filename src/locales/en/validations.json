@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "required": "This field is required",
+    "invalid": "This field is invalid",
+    "name": "This name is invalid",
+    "email": "This email is invalid",
+    "min": "This field has a value less then {{value}}",
+    "max": "This field has a value greater than {{value}}",
+    "minLength": "This field must be at least {{value}} character",
+    "minLength_plural": "This field must be at least {{value}} characters",
+    "maxLength": "This field can't except {{value}} character",
+    "maxLength_plural": "This field can't except {{value}} characters",
+    "number": "This is not an number",
+    "integer": "{{value}} is not an integer"
+  }
+}

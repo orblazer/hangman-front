@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "esnext",
+    "jsx": "preserve",
+    "lib": ["dom", "esnext"],
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "@styles": ["styles"]
+    }
+  },
+  "include": ["src/**/*", "types/**/*.d.ts"],
+  "exclude": ["node_modules", "public", ".cache"]
+}

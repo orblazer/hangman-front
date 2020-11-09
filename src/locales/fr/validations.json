@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "required": "Ce champ est requis",
+    "invalid": "Ce champ est invalide",
+    "name": "Ceci n'est pas un nom valide",
+    "email": "Ceci n'est pas une adresse mail valide",
+    "min": "Ce champ a une valeur inférieur à {{value}}",
+    "max": "Ce champ a une valeur supérieur à {{value}}",
+    "minLength": "Ce champ doit faire au moins {{value}} caractère de long",
+    "minLength_plural": "Ce champ doit faire au moins {{value}} caractères de long",
+    "maxLength": "Ce champ doit faire maximum {{value}} caractère de long",
+    "maxLength_plural": "Ce champ doit faire maximum {{value}} caractères de long",
+    "number": "Ceci n'est pas un nombre",
+    "integer": "{{value}} n'est pas un nombre entier"
+  }
+}
