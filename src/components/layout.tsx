@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import useSiteMetaData from '../hooks/use-site-metadata'
-import { spaces, colors } from '@styles'
+import { spaces, colors } from '@/styles'
 import Link from './styled/link'
 
 const Header = styled.header`

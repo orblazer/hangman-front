@@ -3,7 +3,7 @@ import { Control, Controller, FieldValues, useFormContext } from 'react-hook-for
 import ReactSelect, { Styles, mergeStyles, NamedProps, OptionTypeBase } from 'react-select'
 import { BaseFormFieldProps } from './form'
 import { retrieveError } from './form-utils'
-import { colors } from '@styles'
+import colors from '@/styles/colors'
 import { Help, LabelAndHelp } from './form-field'
 
 const baseStyles: (hasError: boolean) => Partial<Styles> = (hasError) => ({

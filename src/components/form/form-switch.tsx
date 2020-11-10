@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import { retrieveError } from './form-utils'
 import { Help, LabelAndHelp } from './form-field'
 import { BaseFormFieldProps } from './form'
-import { colors, spaces } from '@styles'
+import { colors, spaces } from '@/styles'
 
 const Slider = styled.span(
   ({ size = '24px', padding = '4px' }: { size?: string; padding?: string }) => css`

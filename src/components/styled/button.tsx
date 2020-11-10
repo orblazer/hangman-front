@@ -1,6 +1,6 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colors, spaces } from '@styles'
+import { colors, spaces } from '@/styles'
 
 type Spaces = keyof typeof spaces
 

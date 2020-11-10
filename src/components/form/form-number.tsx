@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { BaseFormFieldProps } from './form'
-import { colors, spaces } from '@styles'
+import { colors, spaces } from '@/styles'
 
 const Wrapper = styled.div(
   ({ hasError }: { hasError?: boolean }) => css`
