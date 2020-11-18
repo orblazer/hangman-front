@@ -1,8 +1,8 @@
 import colors from '@/styles/colors'
 import styled from '@emotion/styled'
-import { Link as GatsbyLink } from 'gatsby'
+import UnstyledLink from '../link'
 
-const Link = styled(GatsbyLink)`
+const Link = styled(UnstyledLink)`
   color: ${colors.link.color};
   cursor: pointer;
   text-decoration: none;
