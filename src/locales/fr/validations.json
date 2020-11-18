@@ -3,6 +3,7 @@
     "required": "Ce champ est requis",
     "invalid": "Ce champ est invalide",
     "name": "Ceci n'est pas un nom valide",
+    "uniqueName": "Ce nom est déjà utilisé",
     "email": "Ceci n'est pas une adresse mail valide",
     "min": "Ce champ a une valeur inférieur à {{value}}",
     "max": "Ce champ a une valeur supérieur à {{value}}",

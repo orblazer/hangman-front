@@ -5,7 +5,13 @@ const derived = {
   primary: nord.pink,
   secondary: nord.blue,
   black: '#1c1c1c',
-  gray: chroma(nord.white2).darken(2).hex()
+  gray: chroma(nord.white2).darken(2).hex(),
+
+  // Status
+  info: nord.blue,
+  success: nord.green,
+  warning: nord.yellow,
+  danger: nord.red
 }
 
 export default {

@@ -1,0 +1,11 @@
+{
+  "infoMessages": {
+    "status": {
+      "failed": "Impossible de ce connecter à la partie.",
+      "connecting": "Connexion à la partie...",
+      "connected": "Connexion à la partie réussi !",
+      "closed": "Vous avez était déconnecter de la partie !",
+      "notFound": "Impossible de trouver la partie<i>{{id}}</i>."
+    }
+  }
+}

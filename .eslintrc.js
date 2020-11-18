@@ -29,7 +29,8 @@ module.exports = {
     es6: true
   },
   globals: {
-    GatsbyTypes: 'readonly'
+    GatsbyTypes: 'readonly',
+    NodeJS: 'readonly'
   },
   plugins: ['@typescript-eslint', 'react', 'graphql', 'prettier'],
   parserOptions: {

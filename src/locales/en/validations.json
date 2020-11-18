@@ -3,6 +3,7 @@
     "required": "This field is required",
     "invalid": "This field is invalid",
     "name": "This name is invalid",
+    "uniqueName": "This name is already used",
     "email": "This email is invalid",
     "min": "This field has a value less then {{value}}",
     "max": "This field has a value greater than {{value}}",

@@ -2,7 +2,7 @@ import { useStaticQuery, graphql } from 'gatsby'
 
 export type SiteMetadata = Pick<
   GatsbyTypes.SiteSiteMetadata,
-  'siteUrl' | 'supportedLanguages' | 'title' | 'titleTemplate' | 'navbarTitle' | 'description' | 'contact' | 'social'
+  'siteUrl' | 'serverUrl' | 'supportedLanguages' | 'title' | 'titleTemplate' | 'navbarTitle' | 'description' | 'contact' | 'social'
 >
 
 export default function useSiteMetadata(): SiteMetadata {
@@ -11,6 +11,7 @@ export default function useSiteMetadata(): SiteMetadata {
       site {
         siteMetadata {
           siteUrl
+          serverUrl
           supportedLanguages
           title
           titleTemplate

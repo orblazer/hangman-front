@@ -1,0 +1,14 @@
+{
+  "title": "Connexion à la partie",
+  "submit": "Se connecter",
+  "fields": {
+    "username": {
+      "label": "Nom d'utilisateur",
+      "placeholder": "Choisissez un nom"
+    },
+    "password": {
+      "label": "Mot de passe de la partie",
+      "placeholder": "Entrez le mot de passe"
+    }
+  }
+}

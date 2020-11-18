@@ -1,0 +1,14 @@
+{
+  "title": "Login to the game",
+  "submit": "Login",
+  "fields": {
+    "username": {
+      "label": "Username",
+      "placeholder": "Choose an username"
+    },
+    "password": {
+      "label": "Password of the game",
+      "placeholder": "Enter the password"
+    }
+  }
+}

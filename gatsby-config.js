@@ -20,6 +20,7 @@ const typegenOption = {
 module.exports = {
   siteMetadata: {
     siteUrl: process.env.URL || 'http://localhost:8000',
+    serverUrl: process.env.SERVER_URL || 'ws://localhost:9001',
     defaultLanguage: 'fr',
     supportedLanguages: ['fr', 'en'],
     title: 'Hangman',
