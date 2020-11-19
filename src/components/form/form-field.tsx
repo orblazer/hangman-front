@@ -42,7 +42,7 @@ const Textarea = styled.textarea(
 export const Help = styled.p(({ error }: { error?: boolean }) => css`
   color: ${error ? colors.input.helpError : colors.input.help};
   font-style: ${error ? 'normal' : 'italic'};
-  font-size: 0.75rem
+  font-size: 0.75rem;
 `)
 
 /**
