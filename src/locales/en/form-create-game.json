@@ -1,0 +1,56 @@
+{
+  "title": "Create an game",
+  "submit": "Create the game",
+  "fields": {
+    "mode": {
+      "label": "Game mode",
+      "solo": "Solo",
+      "multiplayer": "Multiplayer"
+    },
+    "twitchIntegration": {
+      "label": "Streamer mode (only twitch) ?",
+      "help": "Use your stream chat for some features"
+    },
+    "twitchChannel": {
+      "label": "Twitch channel name",
+      "placeholder": "Enter your twitch channel name"
+    },
+    "round": {
+      "label": "Number of round"
+    },
+    "roundInterval": {
+      "label": "Interval between each round (in second)",
+      "twitchHelp": "This represents the duration for the voting of the difficulty."
+    },
+    "difficulties": {
+      "label": "Available difficulties",
+      "placeholder": "Select difficulties",
+      "help": {
+        "random": "A random difficulty will be selected for each round.",
+        "voted": "A difficulty will be voted by your viewers at each round."
+      },
+      "easy": "Easy",
+      "normal": "Normal",
+      "hard": "Hard",
+      "hardcore": "Hardcore"
+    },
+    "maxPlayers": {
+      "label": "Maximum of players"
+    },
+    "username": {
+      "label": "Username",
+      "placeholder": "Choose an username"
+    },
+    "password": {
+      "label": "Game password",
+      "placeholder": "(Optional) Enter an password for the game"
+    },
+    "chat": {
+      "label": "Discussion room ?"
+    }
+  },
+  "infoMessages": {
+    "failed": "Could not connect to the server.",
+    "connecting": "Connect to the server..."
+  }
+}

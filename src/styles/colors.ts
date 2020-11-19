@@ -26,7 +26,10 @@ export default {
   },
   header: {
     backgroundColor: nord.black1,
-    color: nord.white
+    color: nord.white,
+    navbar: {
+      backgroundColor: nord.black2,
+    }
   },
   footer: {
     backgroundColor: nord.black,

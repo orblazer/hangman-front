@@ -1,14 +1,19 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
+import { useTranslation } from 'react-i18next'
 import useSiteMetaData from '../hooks/use-site-metadata'
 import { spaces, colors } from '@/styles'
 import Link from './styled/link'
+import UnstyledLink from './link'
 
 const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: ${colors.header.backgroundColor};
   color: ${colors.header.color};
-  padding: ${spaces[4]} 2vw;
+  padding: 0 2vw;
 `
 
 const Main = styled.main(
@@ -26,12 +31,30 @@ const Footer = styled.footer`
   font-size: 0.75rem;
 `
 
+const MenuLink = styled(UnstyledLink)`
+  display: flex;
+  color: currentColor;
+  cursor: pointer;
+  text-decoration: none;
+  padding: ${spaces[4]};
+
+  &:hover {
+    background-color: ${colors.header.navbar.backgroundColor};
+  }
+`
+
 const Layout: React.FC<{ space?: keyof typeof spaces }> = ({ children, space }) => {
+  const { t } = useTranslation()
   const { title } = useSiteMetaData()
 
   return (
     <>
-      <Header>{title}</Header>
+      <Header>
+        <span>{title}</span>
+        <nav>
+          <MenuLink to="/create-game">{t('navbar.create-game')}</MenuLink>
+        </nav>
+      </Header>
       <Main space={space}>{children}</Main>
       <Footer>
         <span>© {new Date().getFullYear()}</span>

@@ -1,31 +1,32 @@
 import React, { useRef, useState } from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/core'
+import { useTranslation } from 'react-i18next'
 import { supportSSR } from '@/utils/ssr-support'
 import Layout from '../components/layout'
 import Seo from '../components/seo'
 import { GameProvider } from '@/utils/game-context'
 import useSiteMetadata from '@/hooks/use-site-metadata'
-import colors from '@/styles/colors'
-import { useTranslation } from 'react-i18next'
 import WSClient from '@/lib/WSClient'
 import FormGameLogin, { FormGameLoginRef } from '@/components/game/login'
 import { GameChannel, GameChannelData } from '@/lib/game'
-
-const InfoMessage = styled.div(
-  ({ error }: { error?: boolean }) => css`
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: ${error ? colors.danger : 'current'};
-    font-size: 1.2rem;
-  `
-)
+import InfoMessage from '@/components/info-message'
 
 const HomePage: React.FC = () => {
-  const gameId = supportSSR(() => new URLSearchParams(location.search).get('g'), null)
+  const { id: gameId, data } = supportSSR(
+    () => {
+      // Parse search params
+      const searchData = new URLSearchParams(location.search)
+      let data = null
+      try {
+        data = searchData.has('d') ? JSON.parse(atob(searchData.get('d') as string)) : null
+      } catch (e) {}
+
+      return {
+        id: searchData.get('g'),
+        data
+      }
+    },
+    { id: null, data: null }
+  )
   const { serverUrl } = useSiteMetadata()
   const { t } = useTranslation('game')
   const [status, setStatus] = useState<'connecting' | 'connected' | 'login' | 'closed' | 'failed' | 'notFound'>(
@@ -37,7 +38,14 @@ const HomePage: React.FC = () => {
 
   function handleInit(ws: WSClient) {
     ws.on('connect', () => {
-      ws.send(GameChannel.find, gameId)
+      if (data !== null && gameId === data.id) {
+        ws.send(GameChannel.connect, {
+          id: gameId,
+          ...(data.mode === 'multiplayer' ? { username: data.username, password: data.password } : {})
+        })
+      } else {
+        ws.send(GameChannel.find, gameId)
+      }
     })
       .on('error', () => {
         setStatus('failed')
@@ -46,7 +54,7 @@ const HomePage: React.FC = () => {
         setStatus('closed')
       })
       .on('message', (channel, sender, data) => {
-        // Handle pre join game
+        // Handle login game channels
         if (channel === GameChannel.find) {
           if (sender !== ws.id) {
             return
@@ -60,13 +68,7 @@ const HomePage: React.FC = () => {
               })
             } else {
               setStatus('login')
-              setMode(
-                findData.mode === 'multiplayer'
-                  ? findData.hasPassword
-                    ? 'multiplayerWithPass'
-                    : 'multiplayer'
-                  : 'solo'
-              )
+              setMode(findData.hasPassword ? 'multiplayerWithPass' : 'multiplayer')
             }
           } else {
             setStatus('notFound')
@@ -105,10 +107,6 @@ const HomePage: React.FC = () => {
               }
             }
           }
-        }
-        // Not supported channel
-        else {
-          console.log(channel, sender, data)
         }
       })
   }

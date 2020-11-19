@@ -1,0 +1,56 @@
+{
+  "title": "Créer une partie",
+  "submit": "Crée la partie",
+  "fields": {
+    "mode": {
+      "label": "Mode de jeu",
+      "solo": "Solo",
+      "multiplayer": "Multijoueur"
+    },
+    "twitchIntegration": {
+      "label": "Mode streamer (seulement twitch) ?",
+      "help": "Utilise le chat de votre stream pour certaine fonctionnalité"
+    },
+    "twitchChannel": {
+      "label": "Nom de la chaîne twitch",
+      "placeholder": "Entrez le nom de votre chaîne twitch"
+    },
+    "round": {
+      "label": "Nombre de manche"
+    },
+    "roundInterval": {
+      "label": "Interval entre chaque manche (en seconde)",
+      "twitchHelp": "Ceci représente la durée pour le vote de la difficulté."
+    },
+    "difficulties": {
+      "label": "Difficultés possible",
+      "placeholder": "Sélectionner les difficultés",
+      "help": {
+        "random": "Une difficulté aléatoire sera sélectionner à chaque manche.",
+        "voted": "Une difficulté sera voté par vos spectateur à chaque manche."
+      },
+      "easy": "Facile",
+      "normal": "Normal",
+      "hard": "Difficile",
+      "hardcore": "Hardcore"
+    },
+    "maxPlayers": {
+      "label": "Maximum de joueurs"
+    },
+    "username": {
+      "label": "Nom d'utilisateur",
+      "placeholder": "Choisissez un nom"
+    },
+    "password": {
+      "label": "Mot de passe de la partie",
+      "placeholder": "(Optionnel) Entrez un mot de passe pour la partie"
+    },
+    "chat": {
+      "label": "Salon de discussion ?"
+    }
+  },
+  "infoMessages": {
+    "failed": "Impossible de ce connecter au serveur.",
+    "connecting": "Connexion au serveur..."
+  }
+}
