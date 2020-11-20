@@ -13,7 +13,7 @@ interface LoginData {
   password: string
 }
 
-export type FormGameLoginRef = { getUsername(): string; setError(field: string): void }
+export type FormGameLoginRef = { setError(field: string): void }
 type FormGameLoginProps = {
   needPassword?: boolean
   cref?: React.MutableRefObject<FormGameLoginRef | null>
@@ -31,9 +31,6 @@ const FormGameLogin: React.FC<FormGameLoginProps> = ({ needPassword, cref }) => 
 
   if (typeof cref !== 'undefined') {
     cref.current = {
-      getUsername() {
-        return formMethods.getValues('username')
-      },
       setError(field) {
         const errorType = field === 'username' ? 'uniqueName' : 'invalid'
         formMethods.setError(field as keyof LoginData, {

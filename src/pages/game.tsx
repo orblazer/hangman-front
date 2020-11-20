@@ -32,17 +32,13 @@ const HomePage: React.FC = () => {
   const [status, setStatus] = useState<'connecting' | 'connected' | 'login' | 'closed' | 'failed' | 'notFound'>(
     typeof serverUrl === 'undefined' ? 'failed' : 'connecting'
   )
-  const [mode, setMode] = useState<'solo' | 'multiplayer' | 'multiplayerWithPass'>('solo')
+  const [needPassword, setNeedPassword] = useState(false)
   const formLogin = useRef<FormGameLoginRef | null>(null)
-  const [username, setUsername] = useState<string | null>(null)
 
   function handleInit(ws: WSClient) {
     ws.on('connect', () => {
       if (data !== null && gameId === data.id) {
-        ws.send(GameChannel.connect, {
-          id: gameId,
-          ...(data.mode === 'multiplayer' ? { username: data.username, password: data.password } : {})
-        })
+        ws.send(GameChannel.connect, data)
       } else {
         ws.send(GameChannel.find, gameId)
       }
@@ -68,7 +64,7 @@ const HomePage: React.FC = () => {
               })
             } else {
               setStatus('login')
-              setMode(findData.hasPassword ? 'multiplayerWithPass' : 'multiplayer')
+              setNeedPassword(findData.hasPassword)
             }
           } else {
             setStatus('notFound')
@@ -79,6 +75,7 @@ const HomePage: React.FC = () => {
           }
           const connectData = data as GameChannelData['connect']
           if (!connectData) {
+            setStatus('failed')
             return
           }
 
@@ -92,20 +89,9 @@ const HomePage: React.FC = () => {
           }
 
           if (valid) {
-            if (mode === 'solo') {
-              setStatus('connected')
-            } else {
-              const username = formLogin.current?.getUsername() || null
-              if (username !== null) {
-                setUsername(username)
-                setStatus('connected')
-                ws.send(GameChannel.join(gameId || ''))
-                formLogin.current = null
-              } else {
-                setStatus('failed')
-                ws.send(GameChannel.failConnect)
-              }
-            }
+            setStatus('connected')
+            formLogin.current = null
+            ws.send(GameChannel.join(gameId || ''))
           }
         }
       })
@@ -123,11 +109,9 @@ const HomePage: React.FC = () => {
             autoConnect: true,
             onInit: handleInit
           }}
-          username={username}
-          mode={mode === 'multiplayerWithPass' ? 'multiplayer' : mode}
         >
           {status === 'login' ? (
-            <FormGameLogin cref={formLogin} needPassword={mode === 'multiplayerWithPass'} />
+            <FormGameLogin cref={formLogin} needPassword={needPassword} />
           ) : (
             <InfoMessage
               error={status === 'failed' || status === 'notFound'}

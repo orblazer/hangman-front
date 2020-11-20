@@ -5,15 +5,11 @@ import { noop } from 'lodash'
 export interface GameContext {
   server: WSClient | null
   id: string | null
-  mode: 'solo' | 'multiplayer'
-  username: string | null
 }
 
 const RGameContext = React.createContext<GameContext>({
   server: null,
-  id: null,
-  mode: 'solo',
-  username: null
+  id: null
 })
 
 export function useGameContext(): GameContext {
@@ -23,9 +19,7 @@ export function useGameContext(): GameContext {
 export const GameProvider: React.FC<{
   server: { url: string; autoConnect?: boolean; onInit?: (ws: WSClient) => void }
   gameId: string
-  mode: GameContext['mode']
-  username?: string | null
-}> = ({ server, gameId, mode, username = null, children }) => {
+}> = ({ server, gameId, children }) => {
   const webSocket = useMemo(() => new WSClient(server.url), [server.url])
 
   // Connect web socket
@@ -35,7 +29,7 @@ export const GameProvider: React.FC<{
     }
     typeof server.onInit === 'function' && server.onInit(webSocket)
 
-    return () => webSocket.close()
+    return () => webSocket.removeAllListeners().close()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [webSocket])
 
@@ -43,9 +37,7 @@ export const GameProvider: React.FC<{
     <RGameContext.Provider
       value={{
         server: webSocket,
-        id: gameId,
-        mode,
-        username
+        id: gameId
       }}
     >
       {children}

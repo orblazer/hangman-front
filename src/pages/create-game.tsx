@@ -30,7 +30,7 @@ const CreateGamePage: React.FC = () => {
       .on('close', () => {
         setStatus('failed')
       })
-      .on('message', (channel, sender, data) => {
+      .on('message', (channel, _sender, data) => {
         if (channel === GameChannel.create) {
           const gameData = data as GameChannelData['create']
           location.href = `/${lang}/game?g=${gameData.id}&d=${btoa(JSON.stringify(gameData))}`
@@ -39,8 +39,7 @@ const CreateGamePage: React.FC = () => {
       .connect()
 
     return () => {
-      webSocket.removeAllListeners()
-      webSocket.close()
+      webSocket.removeAllListeners().close()
       setStatus('connecting')
     }
   }, [webSocket, lang])

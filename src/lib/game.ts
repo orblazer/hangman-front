@@ -1,10 +1,9 @@
-import { GameContext } from '@/utils/game-context'
-
+export type GameMode = 'solo' | 'multiplayer'
 export interface GameChannelData {
   find:
     | {
         hasPassword: boolean
-        mode: GameContext['mode']
+        mode: GameMode
       }
     | false
   connect:
@@ -13,14 +12,14 @@ export interface GameChannelData {
         username: boolean
       }
     | false
+  create: { id: string; username?: string; password?: string }
+
   join: string
   leave: string
-  create: { id: string; mode: GameContext['mode']; username?: string }
 }
 export const GameChannel = Object.freeze({
   find: 'game/find',
   connect: 'game/connect',
-  failConnect: 'game/fail-connect',
   create: 'game/create',
 
   join: (id: string) => `game/${id}/join`,

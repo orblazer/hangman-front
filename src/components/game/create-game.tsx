@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useForm } from 'react-hook-form'
 import WSClient from '@/lib/WSClient'
 import Form from '../form/form'
 import FormSelect from '../form/form-select'
-import { GameContext } from '@/utils/game-context'
 import FormSwitch from '../form/form-switch'
 import FormField from '../form/form-field'
 import { max, min, twitchName, integer } from '../form/form-rules'
 import Button from '../styled/button'
-import { useForm } from 'react-hook-form'
-import { GameChannel } from '@/lib/game'
+import { GameChannel, GameMode } from '@/lib/game'
 
 type Difficulty = 'easy' | 'normal' | 'hard' | 'hardcore'
 interface FormData {
-  mode: GameContext['mode']
+  mode: GameMode
   twitchIntegration: boolean
   twitchChannel?: string
   round: number
@@ -25,7 +24,7 @@ interface FormData {
   chat?: boolean
 }
 interface SelectModeOption {
-  value: GameContext['mode']
+  value: GameMode
   label: string
 }
 
