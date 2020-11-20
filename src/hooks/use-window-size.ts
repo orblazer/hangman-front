@@ -1,6 +1,6 @@
+import { debounce } from 'lodash'
 import { useState, useEffect } from 'react'
 import { supportSSR } from '../utils/ssr-support'
-import debounce from '../utils/debounce'
 
 export interface WindowSize {
   width: number
