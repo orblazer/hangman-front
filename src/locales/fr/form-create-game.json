@@ -48,9 +48,5 @@
     "chat": {
       "label": "Salon de discussion ?"
     }
-  },
-  "infoMessages": {
-    "failed": "Impossible de ce connecter au serveur.",
-    "connecting": "Connexion au serveur..."
   }
 }

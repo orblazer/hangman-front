@@ -1,10 +1,7 @@
 {
   "infoMessages": {
     "status": {
-      "failed": "Could not connect to the game.",
       "connecting": "Connect to the game...",
-      "connected": "Connection to the game established !",
-      "closed": "You have been disconnect from the game !",
       "notFound": "Could not found the game <i>{{id}}</i>."
     }
   }

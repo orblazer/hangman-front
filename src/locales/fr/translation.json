@@ -16,5 +16,10 @@
       "message": "Oops... Nous n'avons rien trouvez ici.",
       "back": "Retour au site"
     }
+  },
+  "webSocket": {
+    "connecting": "Connexion au serveur...",
+    "connected": "Connexion au serveur réussi !",
+    "failed": "Impossible de ce connecter au serveur !"
   }
 }

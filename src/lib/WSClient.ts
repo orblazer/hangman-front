@@ -1,135 +1,176 @@
 import { EventEmitter } from 'events'
-import { setInterval } from 'timers'
 
-const specificStatusCodeMappings: { [code: string]: string } = {
-  '1000': 'Normal Closure',
-  '1001': 'Going Away',
-  '1002': 'Protocol Error',
-  '1003': 'Unsupported Data',
-  '1004': '(For future)',
-  '1005': 'No Status Received',
-  '1006': 'Abnormal Closure',
-  '1007': 'Invalid frame payload data',
-  '1008': 'Policy Violation',
-  '1009': 'Message too big',
-  '1010': 'Missing Extension',
-  '1011': 'Internal Error',
-  '1012': 'Service Restart',
-  '1013': 'Try Again Later',
-  '1014': 'Bad Gateway',
-  '1015': 'TLS Handshake'
-}
 const decoder = new TextDecoder('utf-8')
+const specificStatusCodeMappings: Readonly<Record<number, string>> = Object.freeze({
+  1000: 'Normal Closure',
+  1001: 'Going Away',
+  1002: 'Protocol Error',
+  1003: 'Unsupported Data',
+  1004: '(For future)',
+  1005: 'No Status Received',
+  1006: 'Abnormal Closure',
+  1007: 'Invalid frame payload data',
+  1008: 'Policy Violation',
+  1009: 'Message too big',
+  1010: 'Missing Extension',
+  1011: 'Internal Error',
+  1012: 'Service Restart',
+  1013: 'Try Again Later',
+  1014: 'Bad Gateway',
+  1015: 'TLS Handshake'
+})
+
+export type WebsocketReadyState = 'connecting' | 'open' | 'closing' | 'closed'
 
 export interface WSClientOptions {
   pingInterval: number
+  /** The number of milliseconds to delay before attempting to reconnect. */
+  reconnectInterval: number
+  /** The maximum number of milliseconds to delay a reconnection attempt. */
+  maxReconnectInterval: number
+  /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
+  reconnectDecay: number
+
+  /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
+  timeoutInterval: number
+
+  /** The maximum number of reconnection attempts to make. Unlimited if null. */
+  maxReconnectAttempts: number | null
 }
 
-export type WebsocketReadyState = 'closed' | 'closing' | 'connecting' | 'open'
+export interface WSClientListeners {
+  close(reason: string, code: number, wasClean: boolean): void
+  message(channel: string, sender: string, data: unknown): void
+}
+
 declare interface WSClient {
-  on(event: 'connect' | 'error', listener: () => void): this
-  on(event: 'close', listener: (reason: string, code: number, wasClean: boolean) => void): this
-  on(event: 'message', listener: (channel: string, sender: string, data: unknown) => void): this
+  on(event: 'connecting' | 'connect' | 'error', listener: () => void): this
+  on(event: 'close', listener: WSClientListeners['close']): this
+  on(event: 'message', listener: WSClientListeners['message']): this
 
-  once(event: 'connect' | 'error', listener: () => void): this
-  once(event: 'close', listener: (reason: string, code: number, wasClean: boolean) => void): this
-  once(event: 'message', listener: (channel: string, sender: string, data: unknown) => void): this
+  once(event: 'connecting' | 'connect' | 'error', listener: () => void): this
+  once(event: 'close', listener: WSClientListeners['close']): this
+  once(event: 'message', listener: WSClientListeners['message']): this
+
+  removeListener(event: 'connecting' | 'connect' | 'error', listener: () => void): this
+  removeListener(event: 'close', listener: WSClientListeners['close']): this
+  removeListener(event: 'message', listener: WSClientListeners['message']): this
 }
+
 // eslint-disable-next-line no-redeclare
 class WSClient extends EventEmitter {
   private readonly url: string
   private readonly options: WSClientOptions
   private native: WebSocket | null = null
+  private connectTimeout: NodeJS.Timeout | null = null
+  private pingTask: NodeJS.Timeout | null = null
   private _id: string | null = null
-  private pingTask?: NodeJS.Timeout
+
+  private reconnectTimeout: NodeJS.Timeout | null = null
+  private reconnectAttempts = 0
 
   constructor(url: string, options: Partial<WSClientOptions> = {}) {
     super()
     this.url = url
     this.options = Object.assign(
       {
-        pingInterval: 3000
+        pingInterval: 3000,
+        timeoutInterval: 2000,
+
+        reconnectInterval: 1000,
+        maxReconnectInterval: 30000,
+        reconnectDecay: 1.5,
+        maxReconnectAttempts: null
       } as WSClientOptions,
       options
     )
+
+    this.connect()
   }
 
+  /**
+   * Get the client id
+   *
+   * @readonly
+   * @type {(string | null)}
+   * @memberof WSClient
+   */
   get id(): string | null {
     return this._id
   }
 
+  /**
+   * Get the ready state
+   *
+   * @readonly
+   * @type {WebsocketReadyState}
+   * @memberof WSClient
+   */
   get readyState(): WebsocketReadyState {
-    switch (this.native?.readyState || WebSocket.CLOSED) {
-      case WebSocket.CLOSING:
-        return 'closing'
-      case WebSocket.CONNECTING:
-        return 'connecting'
-      case WebSocket.OPEN:
-        return 'open'
-      default:
-        return 'closed'
+    if (this.native?.readyState === WebSocket.OPEN) {
+      return this.id !== null ? 'open' : 'connecting'
+    } else if (this.native?.readyState === WebSocket.CONNECTING) {
+      return 'connecting'
+    } else if (this.native?.readyState === WebSocket.CLOSING) {
+      return 'closing'
     }
+    return 'closed'
   }
 
-  /**
-   * Check if websocket is connected
-   */
-  get isConnected(): boolean {
-    return this.readyState === 'open'
-  }
-
-  /**
-   * Connect web socket
-   */
-  connect(): Promise<void> {
-    if (this.isConnected) {
-      return Promise.resolve()
+  connect(): void {
+    if (this.readyState === 'connecting' || this.readyState === 'open' || this.reconnectTimeout !== null) {
+      return
     }
 
-    return new Promise((resolve, reject) => {
-      // Init ws instance
-      this.native = new WebSocket(this.url)
-      this.native.binaryType = 'arraybuffer'
+    this.emit('connecting')
 
-      // Bind events
-      this.native.onopen = () => {
-        if (this.native != null) {
-          resolve()
+    // Instantiate web socket
+    this.native = new WebSocket(this.url)
+    this.native.binaryType = 'arraybuffer'
 
-          // Start ping task
-          this.pingTask = setInterval(this.ping.bind(this), Math.max(this.options.pingInterval, 1000))
+    this.connectTimeout = setTimeout(() => {
+      this.native?.close(4000)
+    }, this.options.timeoutInterval)
 
-          this.native.onclose = this.onClose.bind(this)
-          this.native.onmessage = this.onMessage.bind(this)
-        } else {
-          reject(new Error('Could not connect to the server'))
-        }
-      }
-      this.native.onerror = () => {
-        this.emit('error')
-        reject(new Error('Could not connect to the server'))
-      }
-    })
+    // Bind events
+    this.native.onopen = this.onOpen.bind(this)
+    this.native.onclose = this.onClose.bind(this)
+    this.native.onerror = this.onError.bind(this)
+    this.native.onmessage = this.onMessage.bind(this)
+  }
+
+  private reconnect() {
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout)
+      this.reconnectTimeout = null
+    }
+
+    if (this.options.maxReconnectAttempts && this.reconnectAttempts++ > this.options.maxReconnectAttempts) {
+      this.native?.close(1013)
+      return
+    }
+
+    this.connect()
   }
 
   /**
-   * Close the web socket
-   * @param code The code of close
-   * @param reason The reason of close
+   * Close the connection
+   * @param code The close code
+   * @param reason The close reason
    */
   close(code?: number, reason?: string): void {
-    if (this.isConnected) {
+    if (this.readyState === 'open') {
       this.native?.close(code, reason)
     }
   }
 
   /**
-   * Send an data to specific channel
-   * @param channel The channel want sended
+   * Send an data
+   * @param channel The channel
    * @param data The data want sended
    */
   send(channel: string, data?: unknown): void {
-    if (this.isConnected && this.id !== null) {
+    if (this.readyState === 'open') {
       if (typeof data === 'function') {
         throw new Error('Could not send an function')
       } else if (typeof data !== 'undefined' && data !== null) {
@@ -137,12 +178,56 @@ class WSClient extends EventEmitter {
       } else {
         this.native?.send(Buffer.from(JSON.stringify([channel, this.id])))
       }
+    } else {
+      if (this.listenerCount('error') > 0) {
+        this.emit('error')
+      }
     }
   }
 
+  private onOpen() {
+    if (this.connectTimeout) {
+      clearTimeout(this.connectTimeout)
+      this.connectTimeout = null
+    }
+
+    // Start ping task
+    this.pingTask = setInterval(() => {
+      this.native?.send('')
+    }, Math.max(this.options.pingInterval))
+
+    this.reconnectAttempts = 0
+  }
+
   private onClose({ reason, code, wasClean }: CloseEvent) {
-    this.pingTask && clearInterval(this.pingTask)
+    if (this.connectTimeout) {
+      clearTimeout(this.connectTimeout)
+      this.connectTimeout = null
+    }
+    if (this.pingTask) {
+      clearInterval(this.pingTask)
+      this.pingTask = null
+    }
+
     this.emit('close', reason === '' ? specificStatusCodeMappings[code] || 'UNKNOWN' : reason, code, wasClean)
+
+    // Automatically reconnect if is anormal reconnect
+    if (code > 1000 && code <= 4000 && code !== 1013) {
+      this.reconnectTimeout = setTimeout(
+        () => this.reconnect(),
+        Math.min(
+          this.options.reconnectInterval * Math.pow(this.options.reconnectDecay, this.reconnectAttempts),
+          this.options.maxReconnectInterval
+        )
+      )
+    }
+  }
+
+  private onError() {
+    if (this.listenerCount('error') > 0) {
+      this.emit('error')
+    }
+    this.native?.close()
   }
 
   private onMessage({ data: rawData }: MessageEvent) {
@@ -154,12 +239,6 @@ class WSClient extends EventEmitter {
     }
 
     this.emit('message', channel, sender, data)
-  }
-
-  private ping() {
-    if (this.isConnected) {
-      this.native?.send('')
-    }
   }
 }
 export default WSClient
