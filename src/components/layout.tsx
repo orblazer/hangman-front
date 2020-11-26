@@ -2,10 +2,10 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { useTranslation } from 'react-i18next'
+import { Link as GatsbyLink } from 'gatsby'
 import useSiteMetaData from '../hooks/use-site-metadata'
 import { spaces, colors } from '@/styles'
 import Link from './styled/link'
-import UnstyledLink from './link'
 
 const Header = styled.header`
   display: flex;
@@ -14,6 +14,10 @@ const Header = styled.header`
   background-color: ${colors.header.backgroundColor};
   color: ${colors.header.color};
   padding: 0 2vw;
+
+  & > nav {
+    display: flex;
+  }
 `
 
 const Main = styled.main(
@@ -31,7 +35,7 @@ const Footer = styled.footer`
   font-size: 0.75rem;
 `
 
-const MenuLink = styled(UnstyledLink)`
+const MenuLink = styled(GatsbyLink)`
   display: flex;
   color: currentColor;
   cursor: pointer;
@@ -52,6 +56,7 @@ const Layout: React.FC<{ space?: keyof typeof spaces }> = ({ children, space }) 
       <Header>
         <span>{title}</span>
         <nav>
+          <MenuLink to="/">home</MenuLink>
           <MenuLink to="/create-game">{t('navbar.create-game')}</MenuLink>
         </nav>
       </Header>
