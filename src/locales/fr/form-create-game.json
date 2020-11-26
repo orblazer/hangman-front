@@ -3,9 +3,7 @@
   "submit": "Crée la partie",
   "fields": {
     "mode": {
-      "label": "Mode de jeu",
-      "solo": "Solo",
-      "multiplayer": "Multijoueur"
+      "label": "Mode de jeu"
     },
     "twitchIntegration": {
       "label": "Mode streamer (seulement twitch) ?",
@@ -28,11 +26,7 @@
       "help": {
         "random": "Une difficulté aléatoire sera sélectionner à chaque manche.",
         "voted": "Une difficulté sera voté par vos spectateur à chaque manche."
-      },
-      "easy": "Facile",
-      "normal": "Normal",
-      "hard": "Difficile",
-      "hardcore": "Hardcore"
+      }
     },
     "maxPlayers": {
       "label": "Maximum de joueurs"

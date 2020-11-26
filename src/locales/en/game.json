@@ -1,4 +1,43 @@
 {
+  "info": {
+    "title": "Game information",
+    "mode": {
+      "title": "Game Mode",
+      "solo": "Solo",
+      "multiplayer": "Multiplayer"
+    },
+    "difficulties": {
+      "title": "Available difficulties",
+      "easy": "Easy",
+      "normal": "Normal",
+      "hard": "Hard",
+      "hardcore": "Hardcore"
+    },
+    "twitchIntegrated": {
+      "title": "Twitch integrated",
+      "yes": "YES ({{channel}})",
+      "no": "NO"
+    },
+    "round": "Round",
+    "round_plural": "Rounds",
+    "roundInterval": "Interval between each round",
+    "players": "Online players",
+    "password": {
+      "title": "Password",
+      "none": "(none)"
+    },
+    "chat": {
+      "title": "Chat",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
+    "link": "Link"
+  },
+  "playerList": {
+    "title": "Players list",
+    "kick": "Kick",
+    "owner": "Owner"
+  },
   "infoMessages": {
     "status": {
       "connecting": "Connect to the game...",

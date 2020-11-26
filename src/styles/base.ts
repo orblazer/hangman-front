@@ -1,5 +1,6 @@
 import { css } from '@emotion/core'
 import colors from './colors'
+import spaces from './spaces'
 
 export default css`
   * {
@@ -36,5 +37,9 @@ export default css`
     height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: ${spaces[2]}
   }
 `

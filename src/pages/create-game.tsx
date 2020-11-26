@@ -91,8 +91,8 @@ const CreateGamePage: React.FC = () => {
           name="mode"
           label={t('fields.mode.label')}
           options={[
-            { value: 'solo', label: t('fields.mode.solo') },
-            { value: 'multiplayer', label: t('fields.mode.multiplayer') }
+            { value: 'solo', label: t('info.mode.solo', { ns: 'game' }) },
+            { value: 'multiplayer', label: t('info.mode.multiplayer', { ns: 'game' }) }
           ]}
           isSearchable={false}
           onChange={(value) => {
@@ -161,10 +161,10 @@ const CreateGamePage: React.FC = () => {
           placeholder={t('fields.difficulties.placeholder')}
           help={t(`fields.difficulties.help.${haveTwitchIntegration ? 'voted' : 'random'}`)}
           options={[
-            { value: 'easy', label: t('fields.difficulties.easy') },
-            { value: 'normal', label: t('fields.difficulties.normal') },
-            { value: 'hard', label: t('fields.difficulties.hard') },
-            { value: 'hardcore', label: t('fields.difficulties.hardcore') }
+            { value: 'easy', label: t('info.difficulties.easy', { ns: 'game' }) },
+            { value: 'normal', label: t('info.difficulties.normal', { ns: 'game' }) },
+            { value: 'hard', label: t('info.difficulties.hard', { ns: 'game' }) },
+            { value: 'hardcore', label: t('info.difficulties.hardcore', { ns: 'game' }) }
           ]}
           isMulti
           isClearable

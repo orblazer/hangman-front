@@ -3,9 +3,7 @@
   "submit": "Create the game",
   "fields": {
     "mode": {
-      "label": "Game mode",
-      "solo": "Solo",
-      "multiplayer": "Multiplayer"
+      "label": "Game mode"
     },
     "twitchIntegration": {
       "label": "Streamer mode (only twitch) ?",
@@ -28,11 +26,7 @@
       "help": {
         "random": "A random difficulty will be selected for each round.",
         "voted": "A difficulty will be voted by your viewers at each round."
-      },
-      "easy": "Easy",
-      "normal": "Normal",
-      "hard": "Hard",
-      "hardcore": "Hardcore"
+      }
     },
     "maxPlayers": {
       "label": "Maximum of players"

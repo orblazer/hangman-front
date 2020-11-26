@@ -9,6 +9,7 @@ import { GameChannel, GameChannelData } from '@/lib/game'
 import InfoMessage from '@/components/info-message'
 import { useWebSocket } from '@/utils/websocket-context'
 import { WSClientListeners } from '@/lib/WSClient'
+import GameHub from '@/components/game/hub'
 
 const GamePage: React.FC = () => {
   // Retrieve url data
@@ -30,7 +31,8 @@ const GamePage: React.FC = () => {
         },
         { id: null, data: null }
       ),
-    []
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [location.search]
   )
 
   const { t } = useTranslation('game')
@@ -39,9 +41,7 @@ const GamePage: React.FC = () => {
 
   // Bind websocket
   const webSocket = useWebSocket()
-  const [status, setStatus] = useState<'connecting' | 'connected' | 'login' | 'notFound'>(
-    'connecting'
-  )
+  const [status, setStatus] = useState<'connecting' | 'connected' | 'login' | 'notFound'>('connecting')
   const connectHandler = useCallback(() => {
     if (gameData.data !== null && gameData.id === gameData.data.id) {
       webSocket?.send(GameChannel.connect, gameData.data)
@@ -88,8 +88,27 @@ const GamePage: React.FC = () => {
 
         if (valid) {
           setStatus('connected')
-          formLogin.current = null
-          webSocket?.send(GameChannel.join(gameData.id || ''))
+          // Request game info
+          webSocket.send(GameChannel.info(gameData.id || ''))
+
+          // Store login in url
+          if (formLogin.current !== null) {
+            const searchParams = new URLSearchParams(location.search)
+            searchParams.set(
+              'd',
+              btoa(
+                JSON.stringify({
+                  id: gameData.id,
+                  username: formLogin.current.getUsername(),
+                  password: formLogin.current.getPassword()
+                })
+              )
+            )
+            const newUrl = location.origin + location.pathname + '?' + searchParams.toString()
+            history.pushState({ path: newUrl }, '', newUrl)
+
+            formLogin.current = null
+          }
         }
       }
     },
@@ -105,7 +124,6 @@ const GamePage: React.FC = () => {
 
     return () => {
       webSocket?.removeListener('connect', connectHandler).removeListener('message', messageHandler)
-      setStatus('connecting')
     }
   }, [connectHandler, messageHandler, webSocket])
 
@@ -115,7 +133,9 @@ const GamePage: React.FC = () => {
 
       {gameData.id ? (
         <GameProvider gameId={gameData.id}>
-          {status === 'login' ? (
+          {status === 'connected' ? (
+            <GameHub />
+          ) : status === 'login' ? (
             <FormGameLogin cref={formLogin} needPassword={needPassword} />
           ) : (
             <InfoMessage

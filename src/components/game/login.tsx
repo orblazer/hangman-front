@@ -1,11 +1,12 @@
 import { GameChannel } from '@/lib/game'
 import { useGameContext } from '@/utils/game-context'
+import { useWebSocket } from '@/utils/websocket-context'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Form from '../form/form'
 import FormField from '../form/form-field'
-import { minLength, name } from '../form/form-rules'
+import { minLength, username } from '../form/form-rules'
 import Button from '../styled/button'
 
 interface LoginData {
@@ -13,13 +14,18 @@ interface LoginData {
   password: string
 }
 
-export type FormGameLoginRef = { setError(field: string): void }
+export type FormGameLoginRef = {
+  setError(field: string): void
+  getUsername(): string
+  getPassword(): string | undefined
+}
 type FormGameLoginProps = {
   needPassword?: boolean
   cref?: React.MutableRefObject<FormGameLoginRef | null>
 }
 const FormGameLogin: React.FC<FormGameLoginProps> = ({ needPassword, cref }) => {
   const { t } = useTranslation('form-game-login')
+  const webSocket = useWebSocket()
   const game = useGameContext()
   const formMethods = useForm({
     mode: 'onChange',
@@ -37,12 +43,18 @@ const FormGameLogin: React.FC<FormGameLoginProps> = ({ needPassword, cref }) => 
           type: errorType,
           message: t(`rules.${errorType}`, { ns: 'validations' })
         })
+      },
+      getUsername() {
+        return formMethods.getValues('username')
+      },
+      getPassword() {
+        return formMethods.getValues('password')
       }
     }
   }
 
   function handleSubmit(data: LoginData) {
-    game.server?.send(GameChannel.connect, {
+    webSocket?.send(GameChannel.connect, {
       id: game.id,
       ...data
     })
@@ -61,7 +73,7 @@ const FormGameLogin: React.FC<FormGameLoginProps> = ({ needPassword, cref }) => 
         rules={{
           required: true,
           minLength: minLength(3),
-          pattern: name()
+          pattern: username()
         }}
       />
       {needPassword && (

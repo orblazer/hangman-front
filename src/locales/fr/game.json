@@ -1,4 +1,43 @@
 {
+  "info": {
+    "title": "Information de la partie",
+    "mode": {
+      "title": "Mode de jeu",
+      "solo": "Solo",
+      "multiplayer": "Multijoueur"
+    },
+    "difficulties": {
+      "title": "Difficultés possible",
+      "easy": "Facile",
+      "normal": "Normal",
+      "hard": "Difficile",
+      "hardcore": "Hardcore"
+    },
+    "twitchIntegrated": {
+      "title": "Intégration twitch",
+      "yes": "OUI ({{channel}})",
+      "no": "NON"
+    },
+    "round": "Manche",
+    "round_plural": "Manches",
+    "roundInterval": "Interval entre chaque manche",
+    "players": "Joueurs en ligne",
+    "password": {
+      "title": "Mot de passe",
+      "none": "(aucun)"
+    },
+    "chat": {
+      "title": "Chat",
+      "yes": "Activé",
+      "no": "Désactivé"
+    },
+    "link": "Lien"
+  },
+  "playerList": {
+    "title": "Liste de joueurs",
+    "kick": "Expulser",
+    "owner": "Propriétaire"
+  },
   "infoMessages": {
     "status": {
       "connecting": "Connexion à la partie...",

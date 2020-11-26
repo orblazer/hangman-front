@@ -32,8 +32,8 @@ const FieldStyle = ({
     border-color: ${hasError ? colors.input.hoverErrorBorderColor : colors.input.hoverBorderColor};
   }
 `
-const Input = styled.input(FieldStyle)
-const Textarea = styled.textarea(
+export const Input = styled.input(FieldStyle)
+export const Textarea = styled.textarea(
   FieldStyle,
   css`
     resize: vertical;

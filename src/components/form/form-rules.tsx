@@ -52,6 +52,13 @@ export function twitchName(): ValidationValueMessage<RegExp> {
   }
 }
 
+export function username(): ValidationValueMessage<RegExp> {
+  return {
+    value: /^[a-z0-9][\w]{2,24}$/i,
+    message: t('rules.name')
+  }
+}
+
 export const integer = (value: number): ValidateResult => {
   value = Number(value)
   return Number.isInteger(value) || t('rules.integer', { value })

@@ -21,5 +21,7 @@
     "connecting": "Connexion au serveur...",
     "connected": "Connexion au serveur réussi !",
     "failed": "Impossible de ce connecter au serveur !"
-  }
+  },
+  "copy": "Copier",
+  "copied": "Copié !"
 }

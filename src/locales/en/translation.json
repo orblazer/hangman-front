@@ -21,5 +21,7 @@
     "connecting": "Connecting to the server...",
     "connected": "Connected to the server !",
     "failed": "Could not connect to the server !"
-  }
+  },
+  "copy": "Copy",
+  "copied": "Copied !"
 }
