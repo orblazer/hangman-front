@@ -118,7 +118,7 @@ const FormSwitch = <TFieldValues extends FieldValues = FieldValues>({
         control={control as Control}
         rules={rules}
         name={name}
-        render={(props) => {
+        render={({value, ...props}) => {
           // Retrieve icon
           if (checkedIcon === true) {
             checkedIcon = 'check'
@@ -132,6 +132,7 @@ const FormSwitch = <TFieldValues extends FieldValues = FieldValues>({
               <Switch>
                 <input
                   {...props}
+                  checked={value}
                   type="checkbox"
                   onChange={(e) => {
                     props.onChange(e.target.checked)
