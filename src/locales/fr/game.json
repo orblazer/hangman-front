@@ -38,6 +38,14 @@
     "kick": "Expulser",
     "owner": "Propriétaire"
   },
+  "chat": {
+    "join": "à rejoin la partie",
+    "leave": "à quitter la partie",
+    "fields": {
+      "message": "Écrivez un message...",
+      "submit": "Envoyer"
+    }
+  },
   "infoMessages": {
     "status": {
       "connecting": "Connexion à la partie...",

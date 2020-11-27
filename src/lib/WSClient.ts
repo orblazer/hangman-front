@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import { PlayerEntry } from './game'
 
 const decoder = new TextDecoder('utf-8')
 const specificStatusCodeMappings: Readonly<Record<number, string>> = Object.freeze({
@@ -41,12 +42,15 @@ export interface WSClientOptions {
 export interface WSClientListeners {
   close(reason: string, code: number, wasClean: boolean): void
   message(channel: string, sender: string, data: unknown): void
+  'game/player'(player: PlayerEntry): void
 }
 
 declare interface WSClient {
   on(event: 'connecting' | 'connect' | 'error', listener: () => void): this
   on(event: 'close', listener: WSClientListeners['close']): this
   on(event: 'message', listener: WSClientListeners['message']): this
+  on(event: 'game/playerJoin', listener: WSClientListeners['game/player']): this
+  on(event: 'game/playerLeave', listener: WSClientListeners['game/player']): this
 
   once(event: 'connecting' | 'connect' | 'error', listener: () => void): this
   once(event: 'close', listener: WSClientListeners['close']): this
@@ -55,6 +59,8 @@ declare interface WSClient {
   removeListener(event: 'connecting' | 'connect' | 'error', listener: () => void): this
   removeListener(event: 'close', listener: WSClientListeners['close']): this
   removeListener(event: 'message', listener: WSClientListeners['message']): this
+  removeListener(event: 'game/playerJoin', listener: WSClientListeners['game/player']): this
+  removeListener(event: 'game/playerLeave', listener: WSClientListeners['game/player']): this
 }
 
 // eslint-disable-next-line no-redeclare

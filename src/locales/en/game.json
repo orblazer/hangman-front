@@ -38,6 +38,14 @@
     "kick": "Kick",
     "owner": "Owner"
   },
+  "chat": {
+    "join": "has joined game",
+    "leave": "has left game",
+    "fields": {
+      "message": "Write an message...",
+      "submit": "Send"
+    }
+  },
   "infoMessages": {
     "status": {
       "connecting": "Connect to the game...",

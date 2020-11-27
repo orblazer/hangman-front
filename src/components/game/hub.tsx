@@ -13,6 +13,7 @@ import spaces from '@/styles/spaces'
 import PlayerList from './player-list'
 import { formatDuration } from '@/utils/date'
 import { PlayerEntry } from '@/lib/game'
+import Chat from './chat'
 
 const Grouped = styled.div`
   display: flex;
@@ -46,7 +47,9 @@ const GameHub: React.FC = () => {
 
   return (
     <Grid templateColumns="2fr 1fr">
-      <div>Hello</div>
+      <div css={{ marginRight: spaces[4], height: '50vh' }}>
+        {options?.mode === 'multiplayer' && options.chat && <Chat />}
+      </div>
       <div>
         <h2>{t('info.title')}</h2>
         {options && (
@@ -100,9 +103,9 @@ const GameHub: React.FC = () => {
                   </Button>
                 </Grouped>
                 <h2 css={{ marginTop: spaces[8] }}>{t('playerList.title')}</h2>
+                <PlayerList players={players} canKick={isOwner} onKick={handleKickPlayer} />
               </>
             )}
-            <PlayerList players={players} canKick={isOwner} onKick={handleKickPlayer} />
           </>
         )}
       </div>

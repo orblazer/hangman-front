@@ -50,9 +50,13 @@ export const GameProvider: React.FC<{
       } else if (channel === GameChannel.join(gameId)) {
         if (typeof players.find((player) => player.id === (data as PlayerEntry).id) === 'undefined') {
           setPlayers((players) => [...players, data as PlayerEntry])
+          webSocket?.emit('game/playerJoin', data)
         }
       } else if (channel === GameChannel.leave(gameId)) {
-        setPlayers((players) => players.filter((player) => player.id !== (data as PlayerEntry).id))
+        if (typeof players.find((player) => player.id !== (data as PlayerEntry).id) !== 'undefined') {
+          setPlayers((players) => players.filter((player) => player.id !== (data as PlayerEntry).id))
+          webSocket?.emit('game/playerLeave', data)
+        }
       } else if (channel === GameChannel.newOwner(gameId)) {
         setOwner(data === webSocket?.id)
 
@@ -66,7 +70,7 @@ export const GameProvider: React.FC<{
         )
       }
     },
-    [gameId, players, webSocket?.id]
+    [gameId, players, webSocket]
   )
 
   // Connect web socket

@@ -52,5 +52,6 @@ export const GameChannel = Object.freeze({
   join: (id: string) => `game/${id}/join`,
   leave: (id: string) => `game/${id}/leave`,
   info: (id: string) => `game/${id}/info`,
-  newOwner: (id: string) => `game/${id}/newOwner`
+  newOwner: (id: string) => `game/${id}/newOwner`,
+  chat: (id: string) => `game/${id}/chat`
 })

@@ -28,7 +28,7 @@ export default {
     backgroundColor: nord.black1,
     color: nord.white,
     navbar: {
-      backgroundColor: nord.black2,
+      backgroundColor: nord.black2
     }
   },
   footer: {
@@ -85,6 +85,28 @@ export default {
       backgroundColor: nord.white,
       hoverBackgroundColor: chroma(nord.white).brighten(1).hex(),
       color: derived.black
+    }
+  },
+  chat: {
+    backgroundColor: nord.black1,
+    color: nord.white,
+    message: {
+      even: {
+        backgroundColor: 'transparent',
+        color: 'currentColor'
+      },
+      odd: {
+        backgroundColor: nord.black2,
+        color: 'currentColor'
+      }
+    },
+    infoMessage: {
+      backgroundColor: nord.blue,
+      color: nord.white
+    },
+    form: {
+      backgroundColor: nord.black2,
+      borderColor: nord.black3
     }
   }
 }
