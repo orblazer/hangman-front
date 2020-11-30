@@ -43,6 +43,7 @@ export interface WSClientListeners {
   close(reason: string, code: number, wasClean: boolean): void
   message(channel: string, sender: string, data: unknown): void
   'game/player'(player: PlayerEntry): void
+  'game/playerLeave'(player: PlayerEntry & { isKick: boolean }): void
 }
 
 declare interface WSClient {
@@ -50,7 +51,7 @@ declare interface WSClient {
   on(event: 'close', listener: WSClientListeners['close']): this
   on(event: 'message', listener: WSClientListeners['message']): this
   on(event: 'game/playerJoin', listener: WSClientListeners['game/player']): this
-  on(event: 'game/playerLeave', listener: WSClientListeners['game/player']): this
+  on(event: 'game/playerLeave', listener: WSClientListeners['game/playerLeave']): this
 
   once(event: 'connecting' | 'connect' | 'error', listener: () => void): this
   once(event: 'close', listener: WSClientListeners['close']): this
@@ -60,7 +61,7 @@ declare interface WSClient {
   removeListener(event: 'close', listener: WSClientListeners['close']): this
   removeListener(event: 'message', listener: WSClientListeners['message']): this
   removeListener(event: 'game/playerJoin', listener: WSClientListeners['game/player']): this
-  removeListener(event: 'game/playerLeave', listener: WSClientListeners['game/player']): this
+  removeListener(event: 'game/playerLeave', listener: WSClientListeners['game/playerLeave']): this
 }
 
 // eslint-disable-next-line no-redeclare

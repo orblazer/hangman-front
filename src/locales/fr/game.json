@@ -39,8 +39,9 @@
     "owner": "Propriétaire"
   },
   "chat": {
-    "join": "à rejoin la partie",
+    "join": "à rejoins la partie",
     "leave": "à quitter la partie",
+    "kick": "à été expulser de la partie",
     "fields": {
       "message": "Écrivez un message...",
       "submit": "Envoyer"
@@ -49,7 +50,8 @@
   "infoMessages": {
     "status": {
       "connecting": "Connexion à la partie...",
-      "notFound": "Impossible de trouver la partie<i>{{id}}</i>."
+      "notFound": "Impossible de trouver la partie<i>{{id}}</i>.",
+      "kicked": "Vous avez été expulser de la partie"
     }
   }
 }

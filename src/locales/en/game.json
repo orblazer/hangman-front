@@ -41,6 +41,7 @@
   "chat": {
     "join": "has joined game",
     "leave": "has left game",
+    "kick": "has been kicked from the game",
     "fields": {
       "message": "Write an message...",
       "submit": "Send"
@@ -49,7 +50,8 @@
   "infoMessages": {
     "status": {
       "connecting": "Connect to the game...",
-      "notFound": "Could not found the game <i>{{id}}</i>."
+      "notFound": "Could not found the game <i>{{id}}</i>.",
+      "kicked": "You have been kicked from the game"
     }
   }
 }

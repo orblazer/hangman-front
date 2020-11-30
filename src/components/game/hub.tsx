@@ -12,8 +12,9 @@ import Grid from '../styled/grid'
 import spaces from '@/styles/spaces'
 import PlayerList from './player-list'
 import { formatDuration } from '@/utils/date'
-import { PlayerEntry } from '@/lib/game'
+import { GameChannel, PlayerEntry } from '@/lib/game'
 import Chat from './chat'
+import { useWebSocket } from '@/utils/websocket-context'
 
 const Grouped = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ const GameHub: React.FC = () => {
   const [linkCopied, copyLink] = useCopyClipboard(resetCopyInterval)
 
   const { id, options, players, isOwner } = useGameContext()
+  const webSocket = useWebSocket()
   const gameUrl = useMemo(() => `${location.origin}/game?g=${id}`, [id])
   const interval = useMemo(
     () =>
@@ -42,7 +44,7 @@ const GameHub: React.FC = () => {
   )
 
   function handleKickPlayer(player: PlayerEntry) {
-    // TODO: Kick the player
+    webSocket?.send(GameChannel.kick(id || ''), player.id)
   }
 
   return (

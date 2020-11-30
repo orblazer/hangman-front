@@ -144,12 +144,14 @@ const Chat: React.FC = () => {
       }
     ])
   }, [pushMessage])
-  const playerLeaveHandler = useCallback<WSClientListeners['game/player']>((player) => {
+  const playerLeaveHandler = useCallback<WSClientListeners['game/playerLeave']>((data) => {
+    const { isKick, ...player } = data
+
     pushMessage((messages) => [
       ...messages,
       {
         type: 'info',
-        message: 'leave',
+        message: isKick ? 'kick' : 'leave',
         owner: player
       }
     ])

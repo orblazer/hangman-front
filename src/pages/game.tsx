@@ -5,7 +5,7 @@ import Layout from '../components/layout'
 import Seo from '../components/seo'
 import { GameProvider } from '@/utils/game-context'
 import FormGameLogin, { FormGameLoginRef } from '@/components/game/login'
-import { GameChannel, GameChannelData } from '@/lib/game'
+import { GameChannel, GameChannelData, PlayerEntry } from '@/lib/game'
 import InfoMessage from '@/components/info-message'
 import { useWebSocket } from '@/utils/websocket-context'
 import { WSClientListeners } from '@/lib/WSClient'
@@ -41,7 +41,7 @@ const GamePage: React.FC = () => {
 
   // Bind websocket
   const webSocket = useWebSocket()
-  const [status, setStatus] = useState<'connecting' | 'connected' | 'login' | 'notFound'>('connecting')
+  const [status, setStatus] = useState<'connecting' | 'connected' | 'login' | 'notFound' | 'kicked'>('connecting')
   const connectHandler = useCallback(() => {
     if (gameData.data !== null && gameData.id === gameData.data.id) {
       webSocket?.send(GameChannel.connect, gameData.data)
@@ -51,12 +51,12 @@ const GamePage: React.FC = () => {
   }, [gameData.data, gameData.id, webSocket])
   const messageHandler = useCallback<WSClientListeners['message']>(
     (channel, sender, data) => {
-      if (sender !== webSocket?.id) {
-        return
-      }
-
       // Handle login game channels
       if (channel === GameChannel.find) {
+        if (sender !== webSocket?.id) {
+          return
+        }
+
         const findData = data as GameChannelData['find']
         if (findData) {
           if (findData.mode === 'solo') {
@@ -71,6 +71,10 @@ const GamePage: React.FC = () => {
           setStatus('notFound')
         }
       } else if (channel === GameChannel.connect) {
+        if (sender !== webSocket?.id) {
+          return
+        }
+
         const connectData = data as GameChannelData['connect']
         if (!connectData) {
           setStatus('notFound')
@@ -111,12 +115,20 @@ const GamePage: React.FC = () => {
           }
         }
       }
+      // Handle kick
+      else if (channel === GameChannel.leave(gameData.id || '')) {
+        const { id: playerId, isKick } = data as PlayerEntry & { isKick: boolean }
+        if (playerId !== webSocket?.id || !isKick) {
+          return
+        }
+        setStatus('kicked')
+      }
     },
     [gameData.id, webSocket]
   )
 
   useEffect(() => {
-    if(webSocket?.readyState === 'open') {
+    if (webSocket?.readyState === 'open') {
       connectHandler()
     }
 
