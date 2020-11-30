@@ -5,11 +5,13 @@ import Layout from '../components/layout'
 import Seo from '../components/seo'
 import { GameProvider } from '@/utils/game-context'
 import FormGameLogin, { FormGameLoginRef } from '@/components/game/login'
-import { GameChannel, GameChannelData, PlayerEntry } from '@/lib/game'
+import { GameChannel, GameChannelData, GameFailConnect, PlayerEntry } from '@/lib/game'
 import InfoMessage from '@/components/info-message'
 import { useWebSocket } from '@/utils/websocket-context'
 import { WSClientListeners } from '@/lib/WSClient'
 import GameHub from '@/components/game/hub'
+
+type GameStatus = 'connecting' | 'connected' | 'login' | 'notFound' | 'full' | 'kicked'
 
 const GamePage: React.FC = () => {
   // Retrieve url data
@@ -41,7 +43,7 @@ const GamePage: React.FC = () => {
 
   // Bind websocket
   const webSocket = useWebSocket()
-  const [status, setStatus] = useState<'connecting' | 'connected' | 'login' | 'notFound' | 'kicked'>('connecting')
+  const [status, setStatus] = useState<GameStatus>('connecting')
   const connectHandler = useCallback(() => {
     if (gameData.data !== null && gameData.id === gameData.data.id) {
       webSocket?.send(GameChannel.connect, gameData.data)
@@ -75,13 +77,17 @@ const GamePage: React.FC = () => {
           return
         }
 
-        const connectData = data as GameChannelData['connect']
-        if (!connectData) {
-          setStatus('notFound')
+        if ((data as GameFailConnect).status === 'full') {
+          if ((data as GameFailConnect).mode === 'solo') {
+            setStatus('notFound')
+          } else {
+            setStatus('full')
+          }
           return
         }
 
         // Check if all field is valid
+        const connectData = data as GameChannelData['connect']
         let valid = true
         for (const [field, fieldValid] of Object.entries(connectData)) {
           if (!fieldValid) {

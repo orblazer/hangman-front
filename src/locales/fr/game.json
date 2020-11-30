@@ -51,6 +51,7 @@
     "status": {
       "connecting": "Connexion à la partie...",
       "notFound": "Impossible de trouver la partie<i>{{id}}</i>.",
+      "full": "La partie est pleine",
       "kicked": "Vous avez été expulser de la partie"
     }
   }

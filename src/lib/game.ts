@@ -25,6 +25,11 @@ export interface MultiplayerGameOptions {
 }
 export type GameOptions = BaseGameOptions & (SoloGameOptions | MultiplayerGameOptions)
 
+export interface GameFailConnect {
+  mode: GameMode
+  status: 'full'
+}
+
 export interface GameChannelData {
   find:
     | {
@@ -37,7 +42,8 @@ export interface GameChannelData {
         password: boolean
         username: boolean
       }
-    | false
+    | GameFailConnect
+    | true
   create: { id: string; username?: string; password?: string }
 
   join: string
