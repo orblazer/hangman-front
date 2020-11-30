@@ -24,7 +24,7 @@ const StatusMessage = styled.div(
     right: 0;
     padding: ${spaces[2]} 2vw;
     text-align: center;
-    background-color: ${status === 'connected' ? colors.success : status === 'failed' ? colors.danger : colors.info};
+    background-color: ${status === 'connected' ? colors.success : status === 'failed' ? colors.danger : colors.warning};
   `
 )
 
